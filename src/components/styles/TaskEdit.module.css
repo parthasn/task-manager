@@ -63,3 +63,17 @@
     top: 20px;
     cursor: pointer;
 }
+
+.editButton{
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px 5px 15px;
+    background: #329C89;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+}

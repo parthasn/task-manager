@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import styles from './styles/TaskEdit.module.css'
+import axios from 'axios'
 
 
 function TaskEdit({data, setShowEdit}) {
@@ -17,6 +18,31 @@ function TaskEdit({data, setShowEdit}) {
     const handleClose = () => {
         setShowEdit(false)
     }
+
+    const handleEdit = () => {
+        let id = data.id
+        let body = JSON.stringify({
+            "description": description
+          });
+          
+          let config = {
+            method: 'patch',
+            url: `https://bristle-lace-tempo.glitch.me/tasks/${id}`,
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            data : body
+          };
+
+          axios(config)
+            .then(function (response) {
+                handleClose()
+                return response
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+    }
     return (
         <div className={styles.container}>
             <div className={styles.closeButton} onClick={handleClose}>X</div>
@@ -30,6 +56,7 @@ function TaskEdit({data, setShowEdit}) {
                     <p className={styles.createdBy}>Description</p>
                     <textarea onChange={handleDescriptionChange} className={styles.description} type="text" value={description}/>
                 </div>
+                <button onClick={handleEdit} className={styles.editButton}>Edit</button>
             </div>
         </div>
     )

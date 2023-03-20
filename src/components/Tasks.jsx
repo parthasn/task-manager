@@ -55,7 +55,7 @@ function Tasks() {
         getData()
         
 
-    }, [tasks])
+    }, [tasks, showEdit])
     
     const navigate = useNavigate()
 
