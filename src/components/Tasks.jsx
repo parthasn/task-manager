@@ -40,7 +40,7 @@ function Tasks() {
         let user = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user'))
         setUserData(user.userData)
 
-        axios.get("http://localhost:3001/tasks")
+        axios.get("https://bristle-lace-tempo.glitch.me/tasks")
         .then(res => {
             // console.log(res.data)
             setTasksList(res.data)
@@ -71,7 +71,7 @@ function Tasks() {
           
           let config = {
             method: 'patch',
-            url: `http://localhost:3001/tasks/${id}`,
+            url: `https://bristle-lace-tempo.glitch.me/tasks/${id}`,
             headers: { 
               'Content-Type': 'application/json'
             },
@@ -112,7 +112,7 @@ function Tasks() {
                 description: taskDescription,
                 creator: userData.fullName
             }
-            axios.post("http://localhost:3001/tasks", {...task})
+            axios.post("https://bristle-lace-tempo.glitch.me/tasks", {...task})
             .then(res => {
                 setTaskTitle("")
                 setTaskDescription("")

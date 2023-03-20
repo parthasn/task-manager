@@ -114,7 +114,7 @@ function Auth() {
             setMessage(msg)
             setEmailBorder({border: '1px solid #F65B2A'})
         }
-        axios.get(`http://localhost:3001/users?email=${email}&password=${password}`)
+        axios.get(`https://bristle-lace-tempo.glitch.me/users?email=${email}&password=${password}`)
         .then((res) => {
             // console.log(res)
             if(res.data.length > 0){
@@ -145,9 +145,10 @@ function Auth() {
         })
         .catch(err => console.log(err))
     }
-
+    // https://bristle-lace-tempo.glitch.me
     const checkUser = async () => {
-        axios.get("http://localhost:3001/users")
+        // axios.get("http://localhost:3001/users")
+        axios.get("https://bristle-lace-tempo.glitch.me/users")
         .then(response => {
             response && response.data.forEach(item => {
                 if(item.email === email){
@@ -199,7 +200,7 @@ function Auth() {
                 password: password
             }
     
-            axios.post("http://localhost:3001/users", {...payload})
+            axios.post("https://bristle-lace-tempo.glitch.me/users", {...payload})
             .then((res) => {
                 let msg = {
                     message: "User successfully created!",
@@ -221,7 +222,7 @@ function Auth() {
     return (
         <div className={styles.container}>
             <div className={styles.heroImageContainer}>
-                <img src={hero}/>
+                <img src={hero} alt="hero-image"/>
             </div>
             {
                 showLogin ? (
