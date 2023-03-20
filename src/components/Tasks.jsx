@@ -12,7 +12,6 @@ import TaskEdit from './TaskEdit';
 
 
 function Tasks() {
-    const [ activeSection, setActiveSection ] = useState("Projects")
     const [ userData, setUserData ] = useState("")
     const [ taskTitle, setTaskTitle ] = useState("")
     const [ taskDescription, setTaskDescription ] = useState("")
@@ -21,12 +20,6 @@ function Tasks() {
     const [ editData, setEditData ] = useState({})
     const [ tasks, setTasks ] = useState(0)
     const [ showAddCard, setShowAddCard ] = useState("to-do")
-    const [ sections ] = useState([
-        {
-            icon: projects,
-            title: 'Projects'
-        }
-    ])
     const [ taskCategory ] = useState([
         {
             id: 'to-do',
@@ -144,27 +137,10 @@ function Tasks() {
                     <div className={styles.header}>
                         <p>TASK MANAGER</p>
                         <div className={styles.sections}>
-                            {
-                                sections.map((item, id) => (
-                                    <div key={id}>
-                                        
-                                        {
-                                            item.title === activeSection ? (
-                                                <div className={styles.sectionBox} style={{borderRight: '4px solid #329C89'}}>
-                                                    <img src={item.icon} className={styles.icon} alt={item.title}/>
-                                                    <p className={styles.title} style={{color: '#212121'}}>{item.title}</p>
-                                                </div>
-                                            ) : (
-                                                <div className={styles.sectionBox}>
-                                                    <img src={item.icon} className={styles.icon} alt={item.title}/>
-                                                    <p className={styles.title} style={{color: '#9A9A9A'}}>{item.title}</p>
-                                                </div>
-                                            )
-                                        }
-                                    </div>
-                                    
-                                ))
-                            }
+                            <div className={styles.sectionBox} style={{borderRight: '4px solid #329C89'}}>
+                                <img src={projects} className={styles.icon} alt="projects"/>
+                                <p className={styles.title} style={{color: '#212121'}}>Projects</p>
+                            </div>
                             <div onClick={handleLogout} className={styles.logout}>
                                 <img src={logout} className={styles.icon} alt="logout"/>
                                 <p className={styles.title} style={{color: '#9A9A9A'}}>Log Out</p>
