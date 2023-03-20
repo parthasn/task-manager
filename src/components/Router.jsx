@@ -22,13 +22,15 @@ function Router() {
     }, [])
     return (
         <Routes>
-            {
+            {/* {
                 loggedIn ? (
                     <Route path="/tasks" element={<Tasks/>}/>
                 ) : (
                     <Route path="/" element={<Auth/>}/>
                 )
-            }
+            } */}
+            <Route path="/tasks" element={<Tasks/>}/>
+            <Route path="/" element={<Auth/>}/>
         </Routes>
     )
 }

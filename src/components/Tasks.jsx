@@ -38,12 +38,12 @@ function Tasks() {
     useEffect(() => {
 
         let user = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user'))
-        setUserData(user.userData)
+        setUserData(user?.userData)
 
         axios.get("https://bristle-lace-tempo.glitch.me/tasks")
         .then(res => {
             // console.log(res.data)
-            setTasksList(res.data)
+            setTasksList(res?.data)
         })
 
     }, [tasks])
@@ -110,7 +110,7 @@ function Tasks() {
                 type: type,
                 title: taskTitle,
                 description: taskDescription,
-                creator: userData.fullName
+                creator: userData?.fullName
             }
             axios.post("https://bristle-lace-tempo.glitch.me/tasks", {...task})
             .then(res => {
