@@ -111,7 +111,7 @@
 }
 
 .taskContainer{
-    height: 100vh;
+    min-height: 100vh;
     margin-top: 34px;
     display: flex;
     flex-direction: row;

@@ -72,6 +72,13 @@ function Tasks() {
 
     const handleDragEnd = (result) => {
         // console.log({result})
+        let changedArr = [...tasksList]
+        for(let i = 0; i < changedArr.length; i++){
+            if(changedArr[i].id === result.draggableId){
+                changedArr[i].type = result?.destination?.droppableId
+            }
+        }
+        setTasksList(changedArr)
         let taskToBeMoved = tasksList?.find(item => item.id === result.draggableId)
         let id = taskToBeMoved.id
         let data = JSON.stringify({
@@ -89,11 +96,11 @@ function Tasks() {
 
           axios(config)
             .then(function (response) {
-            // console.log((response.data));
-            setTasks(tasks+1)
+                return response.data
+            
             })
             .catch(function (error) {
-            console.log(error);
+                console.log(error);
             });
 
     }
