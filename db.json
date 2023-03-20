@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "id": "417dea50-a958-4757-bfa2-dd0380b24745",
+      "fullName": "Parth",
+      "email": "psn@gmail.com",
+      "password": "Test@1234"
+    },
+    {
+      "id": "908d0a11-6eaa-4189-bc17-fb23c76cee41",
+      "fullName": "Richa Singh",
+      "email": "Richa@gmail.com",
+      "password": "Test@123"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "dac32fc3-1668-43cb-a2ef-1970f137ff2c",
+      "index": 1,
+      "type": "completed",
+      "title": "exercise 1",
+      "description": "exercise in the morning!",
+      "creator": "Parth"
+    },
+    {
+      "id": "3485a3e3-3a0a-42a5-820e-48c6186ac635",
+      "index": 2,
+      "type": "to-do",
+      "title": "Exercise 2",
+      "description": "Exercise in the evening!",
+      "creator": "Parth"
+    },
+    {
+      "id": "41dcc543-c0b7-48d5-9bea-959e70e56fdb",
+      "index": 3,
+      "type": "completed",
+      "title": "efewf",
+      "description": "fewefwefwefwe",
+      "creator": "Richa Singh"
+    },
+    {
+      "id": "75671466-5148-4729-a871-b77b2d14ff63",
+      "index": 4,
+      "type": "completed",
+      "title": "ffdsfsdfs",
+      "description": "fddsf",
+      "creator": "Richa Singh"
+    },
+    {
+      "id": "a4cf6978-5dd7-4a59-aafd-87f913f9834f",
+      "index": 5,
+      "type": "in-progress",
+      "title": "fwfwfe",
+      "description": "fefwfew",
+      "creator": "Parth"
+    }
+  ]
+}
