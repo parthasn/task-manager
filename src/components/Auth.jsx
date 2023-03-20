@@ -222,7 +222,7 @@ function Auth() {
     return (
         <div className={styles.container}>
             <div className={styles.heroImageContainer}>
-                <img src={hero} alt="hero-image"/>
+                <img src={hero} alt="hero"/>
             </div>
             {
                 showLogin ? (

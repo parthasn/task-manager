@@ -80,7 +80,7 @@ function Tasks() {
 
           axios(config)
             .then(function (response) {
-            // console.log(JSON.stringify(response.data));
+            // console.log((response.data));
             setTasks(tasks+1)
             })
             .catch(function (error) {
@@ -186,7 +186,7 @@ function Tasks() {
                                                         item.id === showAddCard ? (
                                                             <div className={styles.taskForm}>
                                                                 <input onChange={handleTitleChange} value={taskTitle} type="text" className={styles.titleInput} placeholder="Give your task a title"/>
-                                                                <textarea onChange={handleDescriptionChange} value={taskDescription} rows="6" type="text" className={styles.description} placeholder="Description"/>
+                                                                <textarea onChange={handleDescriptionChange} value={taskDescription} rows="4" type="text" className={styles.description} placeholder="Description"/>
                                                                 <button className={styles.addButton} onClick={() => handleAdd(item.id)}>ADD</button>
                                                             </div>
                                                         ) : null
