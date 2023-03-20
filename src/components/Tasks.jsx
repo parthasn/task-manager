@@ -36,15 +36,24 @@ function Tasks() {
     ])
 
     useEffect(() => {
+        async function getData(){
+            let user = await JSON.parse(localStorage.getItem('user')) || await JSON.parse(sessionStorage.getItem('user'))
+            if(user){
+                setUserData(user?.userData)
 
-        let user = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user'))
-        setUserData(user?.userData)
-
-        axios.get("https://bristle-lace-tempo.glitch.me/tasks")
-        .then(res => {
-            // console.log(res.data)
-            setTasksList(res?.data)
-        })
+                axios.get("https://bristle-lace-tempo.glitch.me/tasks")
+                .then(res => {
+                    // console.log(res.data)
+                    setTasksList(res?.data)
+                })
+                .catch((err) => console.log("Something went wrong", err))
+            }
+            else{
+                navigate('/')
+            }
+        }
+        getData()
+        
 
     }, [tasks])
     
@@ -63,7 +72,7 @@ function Tasks() {
 
     const handleDragEnd = (result) => {
         // console.log({result})
-        let taskToBeMoved = tasksList.find(item => item.id === result.draggableId)
+        let taskToBeMoved = tasksList?.find(item => item.id === result.draggableId)
         let id = taskToBeMoved.id
         let data = JSON.stringify({
             "type": result?.destination?.droppableId
@@ -106,7 +115,7 @@ function Tasks() {
             
             let task = {
                 id: uuid(),
-                index: tasksList.length > 0 ? tasksList.length+1 : 1,
+                index: tasksList?.length > 0 ? tasksList?.length+1 : 1,
                 type: type,
                 title: taskTitle,
                 description: taskDescription,
@@ -175,7 +184,7 @@ function Tasks() {
                                                         <p className={styles.taskTitle}>{item.title}</p>
                                                         <div className={styles.count}>
                                                             {
-                                                                tasksList.filter(elem => elem.type === item.id).length
+                                                                tasksList?.filter(elem => elem.type === item.id).length
                                                             }
                                                         </div>
                                                     </div>

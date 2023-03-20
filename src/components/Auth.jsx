@@ -128,7 +128,7 @@ function Auth() {
                 else{
                     sessionStorage.setItem('user', JSON.stringify(payload))
                 }
-                navigate('/tasks', {replace: true})
+                navigate('/task-manager', {replace: true})
                 window.location.reload()
 
             }
@@ -145,7 +145,6 @@ function Auth() {
         })
         .catch(err => console.log(err))
     }
-    // https://bristle-lace-tempo.glitch.me
     const checkUser = async () => {
         // axios.get("http://localhost:3001/users")
         axios.get("https://bristle-lace-tempo.glitch.me/users")

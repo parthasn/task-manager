@@ -4,32 +4,27 @@ import Auth from './Auth';
 import Tasks from './Tasks';
 
 function Router() {
-    const [ loggedIn, setLoggedIn ] = useState(false)
+    // const [ loggedIn, setLoggedIn ] = useState(false)
     const navigate = useNavigate()
     useEffect(() => {
-        // console.log('in here')
-        let user = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user'))
-        if(!user){
-            // console.log('in here')
-            navigate("/")
-        }
-        else{
-            navigate("/tasks")
-        }
+        async function getUser(){
+            let user = await JSON.parse(localStorage.getItem('user')) || await JSON.parse(sessionStorage.getItem('user'))
+            if(!user){
+                navigate("/", {replace: true})
+            }
+            else{
+                navigate("/task-manager" , {replace: true})
+            }
 
-        // window.location.reload()
-        setLoggedIn(user?.isLoggedIn)
+        
+            // setLoggedIn(user?.isLoggedIn)
+        }
+        getUser()
+        
     }, [])
     return (
         <Routes>
-            {/* {
-                loggedIn ? (
-                    <Route path="/tasks" element={<Tasks/>}/>
-                ) : (
-                    <Route path="/" element={<Auth/>}/>
-                )
-            } */}
-            <Route path="/tasks" element={<Tasks/>}/>
+            <Route path="/task-manager" element={<Tasks/>}/>
             <Route path="/" element={<Auth/>}/>
         </Routes>
     )
