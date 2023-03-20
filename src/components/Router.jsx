@@ -11,15 +11,15 @@ function Router() {
         let user = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user'))
         if(!user){
             // console.log('in here')
-            navigate("/", {replace: true})
+            navigate("/")
         }
         else{
-            navigate("/tasks", {replace: true})
-
+            navigate("/tasks")
         }
+
         // window.location.reload()
         setLoggedIn(user?.isLoggedIn)
-    }, [loggedIn])
+    }, [])
     return (
         <Routes>
             {
@@ -29,7 +29,6 @@ function Router() {
                     <Route path="/" element={<Auth/>}/>
                 )
             }
-            
         </Routes>
     )
 }
