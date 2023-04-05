@@ -125,6 +125,10 @@
     width: 28%;
 }
 
+.dropArea{
+    min-height: 50%;
+}
+
 .taskHeader{
     display: flex;
     flex-direction: row;

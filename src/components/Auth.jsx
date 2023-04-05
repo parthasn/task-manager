@@ -25,7 +25,10 @@ function Auth() {
 
 
     useEffect(() => {
-        
+        let userData = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user'))
+        if(userData){
+            navigate("/task-manager")
+        }
         if(showPassword){
             setType("text")
         }
@@ -37,32 +40,11 @@ function Auth() {
         setPasswordBorder({border: '1px solid #CBDBEA'})
     },[showPassword, showLogin])
 
-    const handleFocus = (e) => {
+    const handleFocus = (placeholder) => {
         setMessage("")
-        if(e.target.placeholder === "Email"){
-            // setEmailFocus(true)
-            setEmailBorder({border: '2px solid #329C89'})
-            setFullNameBorder({border: '1px solid #CBDBEA'})
-            setPasswordBorder({border: '1px solid #CBDBEA'})
-            // setPasswordFocus(false)
-            // setFullNameFocus(false)
-        }
-        else if(e.target.placeholder === "Full Name"){
-            // setFullNameFocus(true)
-            setEmailBorder({border: '1px solid #CBDBEA'})
-            setFullNameBorder({border: '2px solid #329C89'})
-            setPasswordBorder({border: '1px solid #CBDBEA'})
-            // setPasswordFocus(false)
-            // setEmailFocus(false)
-        }
-        else{
-            // setPasswordFocus(true)
-            setEmailBorder({border: '1px solid #CBDBEA'})
-            setFullNameBorder({border: '1px solid #CBDBEA'})
-            setPasswordBorder({border: '2px solid #329C89'})
-            // setEmailFocus(false)
-            // setFullNameFocus(false)
-        }
+        setEmailBorder({border: placeholder === "email" ? '2px solid #329C89' : '1px solid #CBDBEA'})
+        setFullNameBorder({border: placeholder === "full-name" ? '2px solid #329C89' : '1px solid #CBDBEA'})
+        setPasswordBorder({border: placeholder === "password" ? '2px solid #329C89' : '1px solid #CBDBEA'})
     }
 
     const handleBlur = () => {
@@ -72,17 +54,18 @@ function Auth() {
        
     }    
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value)
-    }
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value)
-    }
-
-    const handlefullNameChange = (e) => {
-        setFullName(e.target.value)
-    }
+    const handleInputChange = (e) => {
+        const name = e.target.name
+        const value = e.target.value
+      
+        if (name === "email") {
+          setEmail(value)
+        } else if (name === "password") {
+          setPassword(value)
+        } else if (name === "fullName") {
+          setFullName(value)
+        }
+      }
 
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
@@ -255,11 +238,12 @@ function Auth() {
                                     style = {emailBorder}    
                                 >
                                     <input 
-                                        onFocus={handleFocus} 
+                                        onFocus={() => handleFocus('email')} 
                                         onBlur={handleBlur} 
-                                        onChange={handleEmailChange}
+                                        onChange={handleInputChange}
                                         className={styles.input} 
                                         type="text" 
+                                        name="email"
                                         value={email} 
                                         placeholder="Email"/>
                                 </div>
@@ -268,11 +252,12 @@ function Auth() {
                                     style = {passwordBorder}      
                                 >
                                     <input 
-                                        onFocus={handleFocus} 
+                                        onFocus={() => handleFocus('password')} 
                                         onBlur={handleBlur} 
-                                        onChange={handlePasswordChange}
+                                        onChange={handleInputChange}
                                         className={styles.input}  t
                                         type={type} 
+                                        name="password"
                                         value={password} 
                                         placeholder="Password"/>
                                     <div onClick={handleShowPassword} className={styles.showPassword}>
@@ -344,11 +329,12 @@ function Auth() {
                                     style = {fullNameBorder}    
                                 >
                                     <input 
-                                        onFocus={handleFocus} 
+                                        onFocus={() => handleFocus('full-name')} 
                                         onBlur={handleBlur} 
-                                        onChange={handlefullNameChange}
+                                        onChange={handleInputChange}
                                         className={styles.input} 
                                         type="text" 
+                                        name="fullName"
                                         value={fullName} 
                                         placeholder="Full Name"/>
                                 </div>
@@ -357,10 +343,11 @@ function Auth() {
                                     style = {emailBorder}    
                                 >
                                     <input 
-                                        onFocus={handleFocus} 
+                                        onFocus={() => handleFocus('email')} 
                                         onBlur={handleBlur} 
-                                        onChange={handleEmailChange}
+                                        onChange={handleInputChange}
                                         className={styles.input} 
+                                        name="email"
                                         type="text" 
                                         value={email} 
                                         placeholder="Email"/>
@@ -370,10 +357,11 @@ function Auth() {
                                     style = {passwordBorder}      
                                 >
                                     <input 
-                                        onFocus={handleFocus} 
+                                        onFocus={() => handleFocus('password')} 
                                         onBlur={handleBlur} 
-                                        onChange={handlePasswordChange}
-                                        className={styles.input}  t
+                                        onChange={handleInputChange}
+                                        className={styles.input}
+                                        name="password"
                                         type={type} 
                                         value={password} 
                                         placeholder="Password"/>

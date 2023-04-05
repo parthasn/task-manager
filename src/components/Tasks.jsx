@@ -3,7 +3,7 @@ import styles from './styles/Tasks.module.css'
 import projects from '../projects.svg';
 import logout from '../logout.svg';
 import profile from '../profile.svg';
-import { useNavigate } from "react-router-dom"
+import { json, useNavigate } from "react-router-dom"
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import axios from 'axios';
 import { v4 as uuid } from "uuid";
@@ -38,23 +38,15 @@ function Tasks() {
     useEffect(() => {
         async function getData(){
             let user = await JSON.parse(localStorage.getItem('user')) || await JSON.parse(sessionStorage.getItem('user'))
-            if(user){
-                setUserData(user?.userData)
-
+            setUserData(user?.userData)
                 axios.get("https://bristle-lace-tempo.glitch.me/tasks")
                 .then(res => {
                     // console.log(res.data)
                     setTasksList(res?.data)
                 })
                 .catch((err) => console.log("Something went wrong", err))
-            }
-            else{
-                navigate('/')
-            }
         }
         getData()
-        
-
     }, [tasks, showEdit])
     
     const navigate = useNavigate()
@@ -69,39 +61,88 @@ function Tasks() {
         }
         
     }
+    // console.log({tasksList})
+
+    const insert = (arr, s, d) => {
+
+        let output = []
+        let sourceElem = arr[s]
+        for(let i = 0; i < arr.length; i++){
+                if(i !== (s)){
+                output.push(arr[i])
+            }
+        }
+        if(d){
+            output.splice(d-1, 0, sourceElem)
+        }
+        else{
+            output.push(sourceElem)
+        }
+        
+        return output
+    }
 
     const handleDragEnd = (result) => {
         // console.log({result})
-        let changedArr = [...tasksList]
-        for(let i = 0; i < changedArr.length; i++){
-            if(changedArr[i].id === result.draggableId){
-                changedArr[i].type = result?.destination?.droppableId
-            }
+        if(!result.destination){
+            return
         }
-        setTasksList(changedArr)
-        let taskToBeMoved = tasksList?.find(item => item.id === result.draggableId)
-        let id = taskToBeMoved.id
-        let data = JSON.stringify({
-            "type": result?.destination?.droppableId
-          });
-          
-          let config = {
-            method: 'patch',
-            url: `https://bristle-lace-tempo.glitch.me/tasks/${id}`,
-            headers: { 
-              'Content-Type': 'application/json'
-            },
-            data : data
-          };
+        const { source, destination } = result
+        // console.log({source}, {destination})
+        let changedArr = [...tasksList]
+        let output
+        if(source.droppableId === destination.droppableId){
+            output = insert(changedArr, source.index, destination.index+1)
 
-          axios(config)
-            .then(function (response) {
-                return response.data
-            
+        }
+        else{
+            changedArr.forEach((item) => {
+                if(item.id === result.draggableId){
+                    item.type = result?.destination?.droppableId
+                    output = insert(changedArr, source.index)
+                }
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+            
+        }
+
+        setTasksList(output || changedArr)
+        let payload = output || changedArr
+        let promises = []
+        payload?.forEach(async(item) => {
+            let res = new Promise((resolve, reject) => {
+                axios.delete(`https://bristle-lace-tempo.glitch.me/tasks/${item.id}`)
+                .then(res => resolve(res))
+                .catch(err => reject(err))
+            })
+            promises.push(res)
+        })
+        // console.log({promises})
+        Promise.all(promises)
+            .then((res) => {
+                // console.log({res})
+                payload?.forEach(async(item) => {
+                // console.log({item})
+                var config = {
+                    method: 'post',
+                    url: 'https://bristle-lace-tempo.glitch.me/tasks',
+                    headers: { 
+                    'Content-Type': 'application/json'
+                    },
+                    data : JSON.stringify(item)
+                };
+                
+                await axios(config)
+                .then((response) => {
+                    // console.log(JSON.stringify(response.data));
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+                
+            })
+        })
+        
+        
 
     }
 
@@ -146,6 +187,14 @@ function Tasks() {
         setShowEdit(true)
         setEditData(data)
     }
+
+    const deleteFunc = (id) => {
+        
+        // console.log('in here')
+        axios.delete(`https://bristle-lace-tempo.glitch.me/tasks/${id}`)
+        .then(res => setTasks(tasks+1))
+        .catch(err => console.log(err))
+    }
     return (
         <div>
             <div className={styles.container}>
@@ -179,57 +228,61 @@ function Tasks() {
                         >
                             <div className={styles.taskContainer}>
                                 {
-                                    taskCategory.map((item) => (
-                                        <Droppable key={item.id} droppableId={item.id}>
-                                            {(provided, snapshot) => (
-                                                <div 
-                                                    className={styles.taskBox}
-                                                    ref={provided.innerRef}
-                                                    {...provided.droppableProps}
-                                                >
-                                                    <div className={styles.taskHeader}>
-                                                        <p className={styles.taskTitle}>{item.title}</p>
-                                                        <div className={styles.count}>
-                                                            {
-                                                                tasksList?.filter(elem => elem.type === item.id).length
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <div onClick={() => handleAddButton(item.id)} className={styles.addTask}>
-                                                        <p className={styles.add}>+</p>
-                                                    </div>
+                                    taskCategory.map((item, index) => (
+                                        <div key={index} className={styles.taskBox}>
+                                            <div className={styles.taskHeader}>
+                                                <p className={styles.taskTitle}>{item.title}</p>
+                                                <div className={styles.count}>
                                                     {
-                                                        item.id === showAddCard ? (
-                                                            <div className={styles.taskForm}>
-                                                                <input onChange={handleTitleChange} value={taskTitle} type="text" className={styles.titleInput} placeholder="Give your task a title"/>
-                                                                <textarea onChange={handleDescriptionChange} value={taskDescription} rows="4" type="text" className={styles.description} placeholder="Description"/>
-                                                                <button className={styles.addButton} onClick={() => handleAdd(item.id)}>ADD</button>
-                                                            </div>
-                                                        ) : null
+                                                        tasksList?.filter(elem => elem.type === item.id).length
                                                     }
-                                                    {
-                                                        tasksList && tasksList.map((elem) => (
-                                                            <div key={elem.index} onClick={() => handleTaskInfo(elem)}>
-                                                                
-                                                                {
-                                                                    elem.type === item.id ? (
-                                                                        <div>
-                                                                        <TaskCard   item={elem} index={elem.index}/>
-                                                                        </div>
-                                                                        
-                                                                    ) : null
-                                                                }
-                                                                
-                                                            </div>
-                                                            
-                                                        ))
-                                                    }
-                                                    
-                                                    {provided.placeholder}
                                                 </div>
-                                                
-                                            )}
-                                        </Droppable>
+                                            </div>
+                                            <div onClick={() => handleAddButton(item.id)} className={styles.addTask}>
+                                                <p className={styles.add}>+</p>
+                                            </div>
+                                            {
+                                                item.id === showAddCard ? (
+                                                    <div className={styles.taskForm}>
+                                                        <input onChange={handleTitleChange} value={taskTitle} type="text" className={styles.titleInput} placeholder="Give your task a title"/>
+                                                        <textarea onChange={handleDescriptionChange} value={taskDescription} rows="4" type="text" className={styles.description} placeholder="Description"/>
+                                                        <button className={styles.addButton} onClick={() => handleAdd(item.id)}>ADD</button>
+                                                    </div>
+                                                ) : null
+                                            }
+                                            <Droppable   droppableId={item.id}>
+                                                {(provided) => (
+                                                    <div 
+                                                        className={styles.dropArea}
+                                                        ref={provided.innerRef}
+                                                        {...provided.droppableProps}
+                                                    >
+                                                        
+                                                        {
+                                                            tasksList && tasksList.map((elem, id) => (
+                                                                <div key={elem.index} onClick={() => handleTaskInfo(elem)}>
+                                                                    
+                                                                    {
+                                                                        elem.type === item.id ? (
+                                                                            <div>
+                                                                            <TaskCard item={elem} index={id} deleteFunc={(event) => deleteFunc(elem.id)}/>
+                                                                            </div>
+                                                                            
+                                                                        ) : null
+                                                                    }
+                                                                    
+                                                                </div>
+                                                                
+                                                            ))
+                                                        }
+                                                        
+                                                        {provided.placeholder}
+                                                    </div>
+                                                    
+                                                )}
+                                            </Droppable>
+                                        </div>
+                                        
                                     ))
                                 }
                             </div>
